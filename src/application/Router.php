@@ -4,30 +4,17 @@ namespace App\Application;
 
 class Router
 {
+
+    public function __construct(private readonly Container $container) {}
+
     private array $routes = [];
 
-    /**
-     * Adiciona uma nova rota ao roteador.
-     * O handler (função de callback) deve retornar os dados que serão convertidos em JSON.
-     *
-     * @param string $method O método HTTP (GET, POST, PUT, DELETE, etc.).
-     * @param string $path O caminho da URL com parâmetros opcionais como {id}.
-     * @param callable $handler A função de callback que será executada para esta rota.
-     * Esta função deve retornar um array ou objeto que será JSON-encodado.
-     */
-    public function add(string $method, string $path, callable $handler): void
+    public function add(string $method, string $path, callable|array $handler): void
     {
         $this->routes[] = [$method, $this->compilePath($path), $handler];
     }
 
-    /**
-     * Despacha a requisição para a rota correspondente.
-     * Sempre define o cabeçalho Content-Type como application/json.
-     *
-     * @param string $method O método HTTP da requisição atual.
-     * @param string $uri A URI completa da requisição atual.
-     */
-    public function dispatch(string $method, string $uri, ?object $container = null): void
+    public function dispatch(string $method, string $uri): void
     {
         header('Content-Type: application/json');
 
@@ -44,14 +31,17 @@ class Router
                     $params[$name] = $matches[$index] ?? null;
                 }
 
-                // Novo: resolver Controller com container
-                if (is_array($handler) && is_string($handler[0]) && $container) {
-                    $instance = $container->get($handler[0]);
-                    $handler = [$instance, $handler[1]];
+                try {
+                    $responseData = $this->resolveAndCall($handler, $params);
+                    echo json_encode($responseData);
+                } catch (\Throwable $e) {
+                    http_response_code(500);
+                    echo json_encode([
+                        'error' => 'Erro interno',
+                        'message' => $e->getMessage()
+                    ]);
                 }
 
-                $responseData = call_user_func_array($handler, $params);
-                echo json_encode($responseData);
                 return;
             }
         }
@@ -63,17 +53,25 @@ class Router
         ]);
     }
 
-    /**
-     * Compila o caminho da rota em uma expressão regular e extrai os nomes dos parâmetros.
-     *
-     * @param string $path O caminho da rota com placeholders como {nome}.
-     * @return array Um array contendo a expressão regular e os nomes dos parâmetros.
-     */
+    private function resolveAndCall(callable|array $handler, array $params): mixed
+    {
+        if (is_array($handler) && is_string($handler[0])) {
+            if (!$this->container) {
+                throw new \RuntimeException("Container não fornecido para resolver dependência do controller.");
+            }
+
+            $instance = $this->container->get($handler[0]);
+            return call_user_func_array([$instance, $handler[1]], $params);
+        }
+
+        return call_user_func_array($handler, $params);
+    }
+
     private function compilePath(string $path): array
     {
         $pattern = preg_replace_callback('/\{(\w+)\}/', function ($matches) {
             return '(?P<' . $matches[1] . '>[^/]+)';
-        }, rtrim($path, '/')); // Remove barra final para consistência
+        }, rtrim($path, '/'));
 
         $regex = '@^' . $pattern . '$@D';
 

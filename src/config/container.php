@@ -2,7 +2,8 @@
 
 use App\Application\Container;
 use App\Application\Database;
-
+use App\Core\Repository\PRRepositoryInterface;
+use App\Infra\Database\MySQL\PRRepository;
 
 $databaseConfig = require __DIR__ . '/database.php';
 
@@ -16,5 +17,8 @@ $container->bind('database', function () use ($databaseConfig) {
         $databaseConfig['pass']
     );
 });
+
+$container->bind(PRRepositoryInterface::class, PRRepository::class);
+
 
 return $container;

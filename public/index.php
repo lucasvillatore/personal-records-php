@@ -2,7 +2,9 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-require __DIR__. '/../src/presentation/web/api.php';
+$router = require __DIR__ . '/../src/config/api.php';
 
+$method = $_SERVER['REQUEST_METHOD'];
+$uri = $_SERVER['REQUEST_URI'];
 
-$router->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
+$router->dispatch($method, $uri);
