@@ -2,7 +2,6 @@
 
 namespace App\Presentation\Controller;
 
-use App\Core\Repository\PRRepositoryInterface;
 use App\Core\UseCase\FetchPRFromUsersUseCase;
 
 class PersonalRecordController {
