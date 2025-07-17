@@ -13,12 +13,7 @@ class FetchPRFromUsersUseCase extends UseCaseBase {
     public function execute($payload): mixed {
         $data = $this->repository->fetchPRFromUsers();
 
-        return [
-            [
-                "name" => "lucas",
-                "pr" => "10 milhao de kg"
-            ]
-        ];
+        return $data;
     }
 
 }
