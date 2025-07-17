@@ -20,5 +20,4 @@ $container->bind('database', function () use ($databaseConfig) {
 
 $container->bind(PRRepositoryInterface::class, PRRepository::class);
 
-
 return $container;

@@ -70,16 +70,8 @@ class Container
      */
     protected function resolve(string $class): mixed
     {
-        if (!class_exists($class) && !interface_exists($class)) {
-            throw new RuntimeException("Classe ou interface [$class] não encontrada.");
-        }
-
-        if (interface_exists($class) && !isset($this->bindings[$class])) {
-            throw new RuntimeException("Nenhuma implementação registrada para a interface [$class].");
-        }
-
-        if (interface_exists($class) && isset($this->bindings[$class])) {
-            return $this->get($class);
+        if (!class_exists($class)) {
+            throw new RuntimeException("Classe [$class] não encontrada.");
         }
 
         $reflection = new ReflectionClass($class);
@@ -104,9 +96,16 @@ class Container
                 throw new RuntimeException("Não é possível resolver parâmetro '{$param->getName()}' da classe [$class]");
             }
 
-            $dependencies[] = $this->get($type->getName());
+            $dependencyClass = $type->getName();
+
+            if (interface_exists($dependencyClass) && !isset($this->bindings[$dependencyClass])) {
+                throw new RuntimeException("Nenhuma implementação registrada para a interface [$dependencyClass].");
+            }
+
+            $dependencies[] = $this->get($dependencyClass);
         }
 
         return $reflection->newInstanceArgs($dependencies);
     }
+
 }
