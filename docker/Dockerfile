@@ -8,4 +8,4 @@ COPY ./ /app
 EXPOSE 8000
 
 # Comando que inicia o servidor embutido
-CMD ["php", "-S", "0.0.0.0:8000", "-t", "/app"]
+CMD ["php", "-S", "0.0.0.0:8000", "-t", "/app/public"]

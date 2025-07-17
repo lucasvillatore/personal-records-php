@@ -4,4 +4,17 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./public:/app
+      - .:/app
+  db:
+    image: mysql:8.0
+    ports:
+      - "3360:3360"
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: db
+        MYSQL_USER: user
+        MYSQL_PASSWORD: password
+volumes:
+  db:
