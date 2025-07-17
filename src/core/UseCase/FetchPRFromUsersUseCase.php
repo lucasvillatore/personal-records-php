@@ -10,7 +10,7 @@ class FetchPRFromUsersUseCase extends UseCaseBase {
         private readonly PRRepositoryInterface $repository
     ) { }
 
-    public function execute($payloa): mixed {
+    public function execute($payload): mixed {
         $data = $this->repository->fetchPRFromUsers();
 
         return [
