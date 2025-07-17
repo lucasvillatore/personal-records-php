@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'host' => 'localhost',
+    'host' => 'db',
     'db' => 'db',
     'user' => 'root',
-    'pass' => 'password',
+    'pass' => 'root',
 ];
