@@ -1,7 +1,7 @@
 <?php
 
+use App\Application\Router;
 use App\Presentation\Controller\HealthCheckController;
-use App\Presentation\Web\Router\Router;
 
 $router = new Router();
 

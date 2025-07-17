@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Presentation\Web\Router;
+namespace App\Application;
 
 class Router
 {
@@ -27,7 +27,7 @@ class Router
      * @param string $method O método HTTP da requisição atual.
      * @param string $uri A URI completa da requisição atual.
      */
-    public function dispatch(string $method, string $uri): void
+    public function dispatch(string $method, string $uri, ?object $container = null): void
     {
         header('Content-Type: application/json');
 
@@ -44,15 +44,23 @@ class Router
                     $params[$name] = $matches[$index] ?? null;
                 }
 
-                $responseData = call_user_func_array($handler, $params);
+                // Novo: resolver Controller com container
+                if (is_array($handler) && is_string($handler[0]) && $container) {
+                    $instance = $container->get($handler[0]);
+                    $handler = [$instance, $handler[1]];
+                }
 
+                $responseData = call_user_func_array($handler, $params);
                 echo json_encode($responseData);
-                return; 
+                return;
             }
         }
 
         http_response_code(404);
-        echo json_encode(['error' => '404 - Página não encontrada', 'message' => 'O recurso solicitado não foi encontrado.']);
+        echo json_encode([
+            'error' => '404 - Página não encontrada',
+            'message' => 'O recurso solicitado não foi encontrado.'
+        ]);
     }
 
     /**
