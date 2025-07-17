@@ -16,7 +16,7 @@ class Router
 
     public function dispatch(string $method, string $uri): void
     {
-        header('Content-Type: application/json');
+        header('Content-Type: application/json; charset=UTF-8');
 
         $uri = rtrim(parse_url($uri, PHP_URL_PATH), '/') ?: '/';
 
@@ -39,7 +39,7 @@ class Router
                     echo json_encode([
                         'error' => 'Erro interno',
                         'message' => $e->getMessage()
-                    ]);
+                    ], JSON_UNESCAPED_UNICODE);
                 }
 
                 return;
@@ -50,7 +50,7 @@ class Router
         echo json_encode([
             'error' => '404 - Página não encontrada',
             'message' => 'O recurso solicitado não foi encontrado.'
-        ]);
+        ], JSON_UNESCAPED_UNICODE);
     }
 
     private function resolveAndCall(callable|array $handler, array $params): mixed

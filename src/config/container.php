@@ -9,7 +9,7 @@ $databaseConfig = require __DIR__ . '/database.php';
 
 $container = new Container();
 
-$container->bind('database', function () use ($databaseConfig) {
+$container->bind(MySQLPDO::class, function () use ($databaseConfig) {
     return new MySQLPDO(
         $databaseConfig['host'],
         $databaseConfig['db'],
