@@ -1,7 +1,7 @@
 <?php
 
 use App\Application\Container;
-use App\Application\Database;
+use App\Application\MySQLPDO;
 use App\Core\Repository\PRRepositoryInterface;
 use App\Infra\Database\MySQL\PRRepository;
 
@@ -10,7 +10,7 @@ $databaseConfig = require __DIR__ . '/database.php';
 $container = new Container();
 
 $container->bind('database', function () use ($databaseConfig) {
-    return new Database(
+    return new MySQLPDO(
         $databaseConfig['host'],
         $databaseConfig['db'],
         $databaseConfig['user'],

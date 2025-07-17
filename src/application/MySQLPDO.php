@@ -4,7 +4,7 @@ namespace App\Application;
 
 use PDO;
 
-class Database {
+class MySQLPDO {
 
     private $instance = null;
 
