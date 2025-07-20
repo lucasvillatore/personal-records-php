@@ -18,21 +18,34 @@ class Router
     {
         header('Content-Type: application/json; charset=UTF-8');
 
-        $uri = rtrim(parse_url($uri, PHP_URL_PATH), '/') ?: '/';
+        $uriPath = rtrim(parse_url($uri, PHP_URL_PATH), '/') ?: '/';
+        $queryParams = $_GET;
 
         foreach ($this->routes as [$routeMethod, $pattern, $handler]) {
             if (strtoupper($method) !== strtoupper($routeMethod)) {
                 continue;
             }
 
-            if (preg_match($pattern['regex'], $uri, $matches)) {
-                $params = [];
+            if (preg_match($pattern['regex'], $uriPath, $matches)) {
+                $routeParams = [];
                 foreach ($pattern['params'] as $name => $index) {
-                    $params[$name] = $matches[$index] ?? null;
+                    $routeParams[$name] = $matches[$index] ?? null;
                 }
 
+                $input = file_get_contents('php://input') ?: '';
+                $body = json_decode($input, true);
+                if (!is_array($body)) {
+                    $body = [];
+                }
+
+                $request = new Request(
+                    params: $routeParams,
+                    query: $queryParams,
+                    body: $body
+                );
+
                 try {
-                    $responseData = $this->resolveAndCall($handler, $params);
+                    $responseData = $this->resolveAndCall($handler, [$request]);
                     echo json_encode($responseData);
                 } catch (\Throwable $e) {
                     http_response_code(500);

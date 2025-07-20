@@ -4,5 +4,5 @@ namespace App\Core\Repository;
 
 interface PRRepositoryInterface {
 
-    public function fetchPRFromUsers(): array;
+    public function fetchPRFromUsers(array $params): array;
 }

@@ -11,7 +11,11 @@ class FetchPRFromUsersUseCase extends UseCaseBase {
     ) { }
 
     public function execute($payload): mixed {
-        $data = $this->repository->fetchPRFromUsers();
+        if (!isset($payload['movement_id']) && !isset($payload['movement_name'])) {
+            throw new \InvalidArgumentException('Movement ID or Name is required');
+        }
+
+        $data = $this->repository->fetchPRFromUsers($payload);
 
         return $data;
     }
