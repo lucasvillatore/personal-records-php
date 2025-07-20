@@ -1,0 +1,1 @@
+{"version":1,"defects":{"FetchPRFromUsersUseCaseTest::testShouldReturnAListOfPersonalRecordsOrderedDesc":7},"times":{"FetchPRFromUsersUseCaseTest::testShouldThrowExceptionIfNoMovementIdOrNameProvided":0,"FetchPRFromUsersUseCaseTest::testShouldReturnAListOfPersonalRecordsOrderedDesc":0.001}}
