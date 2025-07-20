@@ -30,3 +30,21 @@ Para executar os testes, rodar o seguinte comando abaixo:
 ```sh
 $ docker exec -it personal_record_php ./vendor/bin/phpunit
 ```
+
+### Endpoints
+
+Para chamar os endpoints, acesse
+
+```
+GET - localhost:8000/personal-records?movement_id=<id>
+
+GET - localhost:8000/personal-records?movement_name=<name>
+```
+
+Exemplo:
+
+```
+GET - localhost:8000/personal-records?movement_id=1
+
+GET - localhost:8000/personal-records?movement_name=Deadlift
+```
