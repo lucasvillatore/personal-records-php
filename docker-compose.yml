@@ -2,7 +2,10 @@ version: '3.8'
 
 services:
   php:
-    build: ./docker
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: personal_record_php
     ports:
       - "8000:8000"
     volumes:
@@ -14,6 +17,9 @@ services:
 
   db:
     image: mysql:8.0
+    container_name: personal_record_db
+    volumes:
+      - db_data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: db
@@ -26,3 +32,7 @@ services:
 
 networks:
   app-network:
+
+volumes:
+  db_data:
+    driver: local
