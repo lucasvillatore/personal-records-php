@@ -28,5 +28,5 @@ $ docker compose up
 Para executar os testes, rodar o seguinte comando abaixo:
 
 ```sh
-./vendor/bin/phpunit
+$ docker exec -it personal_record_php ./vendor/bin/phpunit
 ```
