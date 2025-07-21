@@ -6,7 +6,7 @@
 Antes de realizar qualquer ação, realizar o setup inicial do projeto
 
 ```sh
-$ docker compose up --build
+$ docker compose up --build -d
 $ docker exec -it personal_record_php composer install
 ```
 
