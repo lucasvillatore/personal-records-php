@@ -4,7 +4,6 @@ namespace App\Infra\Database\MySQL;
 
 use App\Application\MySQLPDO;
 use App\Core\Repository\PRRepositoryInterface;
-use PDO;
 
 class PRRepository implements PRRepositoryInterface {
 
